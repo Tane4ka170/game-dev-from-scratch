@@ -1,3 +1,9 @@
+let playerState = "fall";
+const dropdown = document.getElementById("animations");
+dropdown.addEventListener("change", function (e) {
+  playerState = e.target.value;
+});
+
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 
@@ -10,12 +16,21 @@ const spriteWidth = 575;
 const spriteHeight = 523;
 let frameX = 0;
 let frameY = 1;
+
 let gameFrame = 0;
 const staggerFrames = 5;
 const spriteAnimations = [];
 const animationStates = [
   { name: "idle", frame: 7 },
   { name: "jump", frame: 7 },
+  { name: "fall", frame: 7 },
+  { name: "run", frame: 9 },
+  { name: "dizzy", frame: 11 },
+  { name: "sit", frame: 5 },
+  { name: "roll", frame: 7 },
+  { name: "bite", frame: 7 },
+  { name: "ko", frame: 12 },
+  { name: "getHit", frame: 4 },
 ];
 animationStates.forEach((state, index) => {
   let frames = {
@@ -26,18 +41,21 @@ animationStates.forEach((state, index) => {
     let positionY = index * spriteHeight;
     frames.loc.push({ x: positionX, y: positionY });
   }
-  state.loc = frames.loc;
+  spriteAnimations[state.name] = frames;
 });
-console.log(animationStates);
+console.log(spriteAnimations);
 
 function animate() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[];
-  frameX = spriteWidth * position;
+  let position =
+    Math.floor(gameFrame / staggerFrames) %
+    spriteAnimations[playerState].loc.length;
+  let frameX = spriteWidth * position;
+  let frameY = spriteAnimations[playerState].loc[position].y;
   ctx.drawImage(
     playerImage,
     frameX,
-    frameY * spriteHeight,
+    frameY,
     spriteWidth,
     spriteHeight,
     0,
